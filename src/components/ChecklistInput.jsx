@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 
-export default function CheckListInput(props) {
+export default function ChecklistInput(props) {
     const {handleAddTodo} = props
     const [input, setInput] = useState('')
 
