@@ -1,35 +1,41 @@
+import Header from './components/Header'
+import Tabs from './components/Tabs'
+import Checklist from './components/Checklist'
+import CheckListInput from './components/CheckListInput'
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const todos = [
+  //   {input: 'Hello! Add your first task', completed: true},
+  //   {input: 'Buy groceries', completed: false},
+  //   {input: 'Learn React', completed: false},
+  //   {input: 'Build a project', completed: false},
+  //   {input: 'Apply to jobs', completed: false},
+  //   {input: 'Prepare for interview', completed: false},
+  //   {input: 'Go to the gym', completed: true},
+  //   {input: 'Read a book', completed: false},
+  // ]
+  const [todos, setTodos] = useState([
+    {input: 'Hello! Add your first task', completed: true},
+  ])
+
+  const [selectedTab, setSelectedTab] = useState('All')
+
+  function handleAddTodo(input) {
+    setTodos([...todos, {input: input, completed: false}])
+  }
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header todos={todos} />
+      <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} todos={todos} />
+      <Checklist todos={todos} />
+      <CheckListInput handleAddTodo={handleAddTodo} />
     </>
   )
+
+
 }
 
 export default App
