@@ -2,7 +2,7 @@ import Header from './components/Header'
 import Tabs from './components/Tabs'
 import Checklist from './components/Checklist'
 import CheckListInput from './components/CheckListInput'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function App() {
   // const todos = [
@@ -15,22 +15,41 @@ function App() {
   //   {input: 'Go to the gym', completed: true},
   //   {input: 'Read a book', completed: false},
   // ]
-  const [todos, setTodos] = useState([
-    {input: 'Hello! Add your first task', completed: true},
-  ])
+  const [todos, setTodos] = useState([])
 
-  const [selectedTab, setSelectedTab] = useState('All')
+  const [selectedTab, setSelectedTab] = useState('Active')
 
   function handleAddTodo(input) {
     setTodos([...todos, {input: input, completed: false}])
+    handleSaveData(todos)
   }
+
+  function handleDeleteTodo(index) {
+    setTodos(todos.filter((todo, i) => i !== index)) 
+    handleSaveData(todos)
+  }
+
+  function handleCompleteTodo(index) {
+    setTodos(todos.map((todo, i) => i === index ? {...todo, completed: true} : todo))
+    handleSaveData(todos)
+  }
+  
+  function handleSaveData(currentTodos) {
+    localStorage.setItem('Checklist-app', JSON.stringify({todos: currentTodos}))
+  }
+
+  useEffect(() => {
+    if (!localStorage || !localStorage.getItem('Checklist-app')) {return}
+    let db = JSON.parse(localStorage.getItem('Checklist-app'))
+    setTodos(db.todos)
+  }, [])
 
 
   return (
     <>
       <Header todos={todos} />
       <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} todos={todos} />
-      <Checklist todos={todos} />
+      <Checklist handleCompleteTodo={handleCompleteTodo} handleDeleteTodo={handleDeleteTodo} todos={todos} selectedTab={selectedTab}/>
       <CheckListInput handleAddTodo={handleAddTodo} />
     </>
   )
